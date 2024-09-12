@@ -14,8 +14,8 @@ function App() {
               <ul class="contact-info">
                 <li>+91 9910233016</li>
                 <li>yourmanish123@gmail.com</li>
-                <li><a href="https://www.linkedin.com/in/manish-kumar-50259029/"><img src="/linkedin.png" /></a></li>
-                <li><a href="https://github.com/manishnagar"><img src="/git.png" /></a></li>
+                <li><a href="https://www.linkedin.com/in/manish-kumar-50259029/"><img src={`${process.env.PUBLIC_URL}/images/linkedin.png`}/></a></li>
+                <li><a href="https://github.com/manishnagar"><img src={`${process.env.PUBLIC_URL}/images/git.png`}/></a></li>
               </ul>
             </div>
 
@@ -25,7 +25,7 @@ function App() {
         <div className="content">
           <div className="width-container">
             <div className="profile-flex">
-              <div className="profile-img"><img src="/profile-photo.jpg" alt="profile-photo" /></div>
+              <div className="profile-img"><img src={`${process.env.PUBLIC_URL}/images/profile-photo.jpg`} /></div>
               <div className="profile-heading">Front-End Developer | Pioneering The Modern UI Technologies</div>
 
             </div>
