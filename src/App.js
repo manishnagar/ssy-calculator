@@ -16,43 +16,43 @@ function App() {
   const chartInstance = useRef(null);
 
   const interestRate = 8.2 / 100;
-  const investmentYears = 15; 
-  const maturityYears = 21; 
-  const compoundingFrequency = 1; 
+  const investmentYears = 15;
+  const maturityYears = 21;
+  const compoundingFrequency = 1;
 
 
-useEffect(()=>{
-    if (chartInstance.current){
-    chartInstance.current.destroy()
-  }
-
-  const mychartRef = chartRef.current.getContext('2d')
-  if (mychartRef) {
-  chartInstance.current = new Chart(mychartRef, {
-    type:'doughnut',
-    data:{
-      labels: ["Total Investment", "Total Interest"],
-      datasets :[{
-        data: [totalAmount, totalInterest],
-        backgroundColor: ['#42a5f5', '#66bb6a'],
-        }],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-      },
-    },
-  });
-  }
-  return () =>{
-    if(chartInstance.current){
+  useEffect(() => {
+    if (chartInstance.current) {
       chartInstance.current.destroy()
     }
-  }
-  },[totalAmount, totalInterest])
+
+    const mychartRef = chartRef.current.getContext('2d')
+    if (mychartRef) {
+      chartInstance.current = new Chart(mychartRef, {
+        type: 'doughnut',
+        data: {
+          labels: ["Total Investment", "Total Interest"],
+          datasets: [{
+            data: [totalAmount, totalInterest],
+            backgroundColor: ['#42a5f5', '#66bb6a'],
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+          },
+        },
+      });
+    }
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy()
+      }
+    }
+  }, [totalAmount, totalInterest])
 
   const handleInvestmentChange = (e) => {
     const value = e.target.value;
@@ -151,29 +151,29 @@ useEffect(()=>{
     maturityValueAtMaturityEnd = maturityValueAtInvestmentEnd * Math.pow((1 + r / n), n * (t_maturity - t_investment));
 
     let totalInvestment = 0;
-  let yearEndBalance = 0;
+    let yearEndBalance = 0;
 
-  for (let year = 1; year <= t_maturity; year++) {
-    if (year <= t_investment) {
-      totalInvestment += P; // Add yearly deposit
-      yearEndBalance += P; // Year-end balance includes the yearly deposit
+    for (let year = 1; year <= t_maturity; year++) {
+      if (year <= t_investment) {
+        totalInvestment += P; // Add yearly deposit
+        yearEndBalance += P; // Year-end balance includes the yearly deposit
+      }
+
+      // Interest calculation for current year
+      let interestEarned = yearEndBalance * r;
+      yearEndBalance += interestEarned; // Update year-end balance with interest
+
+      yearlyDataArray.push({
+        year,
+        depositedAmount: totalInvestment.toFixed(2),
+        interestEarned: interestEarned.toFixed(2),
+        yearEndBalance: yearEndBalance.toFixed(2),
+      });
     }
-    
-    // Interest calculation for current year
-    let interestEarned = yearEndBalance * r;
-    yearEndBalance += interestEarned; // Update year-end balance with interest
-
-    yearlyDataArray.push({
-      year,
-      depositedAmount: totalInvestment.toFixed(2),
-      interestEarned: interestEarned.toFixed(2),
-      yearEndBalance: yearEndBalance.toFixed(2),
-    });
-  }
-  setMaturityAmount(Number(maturityValueAtMaturityEnd).toFixed(2)); // Maturity amount at the end of 21 years
-  setTotalAmount(Number(totalInvestment).toFixed(2)); // Total investment amount
-  setTotalInterest((maturityValueAtMaturityEnd - totalInvestment).toFixed(2)); // Total interest earned
-  setYearlyData(yearlyDataArray); // Set yearly data for the table
+    setMaturityAmount(Number(maturityValueAtMaturityEnd).toFixed(2)); // Maturity amount at the end of 21 years
+    setTotalAmount(Number(totalInvestment).toFixed(2)); // Total investment amount
+    setTotalInterest((maturityValueAtMaturityEnd - totalInvestment).toFixed(2)); // Total interest earned
+    setYearlyData(yearlyDataArray); // Set yearly data for the table
   };
 
   return (
@@ -184,44 +184,44 @@ useEffect(()=>{
             Sukanya Samriddhi Yojana (SSY) Calculator
           </div>
           <div className="body-text">
-          Sukanya Samriddhi Yojana is a small deposit scheme launched in 2015 by the Prime Minister, Mr. Narendra Modi, as a part of the Beti Bachao Beti Padao campaign to help the guardians or parents meet their girl child’s education and marriage expenses. The investor can use the Sukanya Samriddhi Yojana (SSY) calculator to estimate the maturity amount and decipher how much corpus she/he will be exactly able to save for his/her daughter’s education and marriage.
+            Sukanya Samriddhi Yojana is a small deposit scheme launched in 2015 by the Prime Minister, Mr. Narendra Modi, as a part of the Beti Bachao Beti Padao campaign to help the guardians or parents meet their girl child’s education and marriage expenses. The investor can use the Sukanya Samriddhi Yojana (SSY) calculator to estimate the maturity amount and decipher how much corpus she/he will be exactly able to save for his/her daughter’s education and marriage.
           </div>
           <div className="current-intrate">
-              <div className="intrate-text">2024 Latest interest rate @ 8.2 % p.a.</div>
-            </div>
+            <div className="intrate-text">2024 Latest interest rate @ 8.2 % p.a.</div>
+          </div>
           <div className="calci-bg">
-            
+
 
             <form>
               <div className="slider-flex">
                 <div className="width40">
                   <div className="input-flex">
                     <div>
-                    <label className="calci-label" id="typeLabel">
-                      Yearly Investment Amount : 
-                    </label>
-                    <div className="min-value">₹250</div>
+                      <label className="calci-label" id="typeLabel">
+                        Yearly Investment Amount :
+                      </label>
+                      <div className="min-value">₹250</div>
                     </div>
                     <div>
-                    <div className="calci-input-ctrl large-field prefix-rupee">
-                      <span className="cl-error_info error-msg"></span>
-                      <span className="rupee-symbol">₹</span>
-                      <input
-                        className="form-ctrl"
-                        type="tel"
-                        value={investment}
-                        data-min="250"
-                        data-max="150000"
-                        id="input-amount"
-                        name="amount"
-                        maxLength="12"
-                        onChange={handleInvestmentChange}
-                        onBlur={handleInvestmentBlur} // Validate on blur
-                      />
-                      <span className="focused-br"></span>
-                     
-                    </div>
-                    <div className="max-value">₹150000</div>
+                      <div className="calci-input-ctrl large-field prefix-rupee">
+                        <span className="cl-error_info error-msg"></span>
+                        <span className="rupee-symbol">₹</span>
+                        <input
+                          className="form-ctrl"
+                          type="tel"
+                          value={investment}
+                          data-min="250"
+                          data-max="150000"
+                          id="input-amount"
+                          name="amount"
+                          maxLength="12"
+                          onChange={handleInvestmentChange}
+                          onBlur={handleInvestmentBlur} // Validate on blur
+                        />
+                        <span className="focused-br"></span>
+
+                      </div>
+                      <div className="max-value">₹150000</div>
                     </div>
 
                   </div>
@@ -240,11 +240,11 @@ useEffect(()=>{
                       />
                     </div>
                   </div>
-                  
-                  
+
+
 
                   <div>
-                  {/* <div className="input-flex">
+                    {/* <div className="input-flex">
                   <div>
                     <label className="calci-label" id="typeLabel">
                       Number of Deposit Per Year : 
@@ -273,7 +273,7 @@ useEffect(()=>{
                     </div>
                   </div> */}
 
-                  {/* <div className="calci-input__elements range-input-slider">
+                    {/* <div className="calci-input__elements range-input-slider">
                     <div className="slidecontainer">
                       <input
                         type="range"
@@ -287,97 +287,97 @@ useEffect(()=>{
                       />
                     </div>
                   </div> */}
-                </div>
+                  </div>
 
 
 
-                <div>
-                  <div className="input-flex">
                   <div>
-                    <label className="calci-label" id="typeLabel">Start Year : </label>
-                  </div>
-                    <div>
-                    <div className="calci-input-ctrl large-field prefix-rupee">
-                      
-                      <input
-                        className="form-ctrl"
-                        type="tel"
-                        value={startYear}
-                     
-                        id="start-year"
-                        name="amount"
-                        maxLength="4"
-                        onChange={handleStartYearChange}
-                        onBlur={handleStartYearBlur} // Validate on blur
-                      />
-                      <span className="focused-br"></span>
-                    </div>
-                    </div>
-                  </div>
+                    <div className="input-flex">
+                      <div>
+                        <label className="calci-label" id="typeLabel">Start Year : </label>
+                      </div>
+                      <div>
+                        <div className="calci-input-ctrl large-field prefix-rupee">
 
-                  <div className="calci-input__elements range-input-slider">
-                    <div className="slidecontainer">
-                      <input
-                        type="range"
-                        min="2015"
-                        max="2035"
-                        value={startYear}
-                        onChange={handleStartYearSliderChange}
-                        className="input-slider input-amount"
-                                            id="nps-invest-slider1"
-                      />
-                    </div>
-                  </div>
+                          <input
+                            className="form-ctrl"
+                            type="tel"
+                            value={startYear}
 
-                  <div className="slider-flex">
-                <div>Duration : <span className="bold">15 Years</span></div>
-                <div>Maturity Period : <span className="bold">21 Years</span></div>
-              </div>
-              <div className="note"><span className="bold">Note :</span> Girl's Age must be less then 10 year.</div>
+                            id="start-year"
+                            name="amount"
+                            maxLength="4"
+                            onChange={handleStartYearChange}
+                            onBlur={handleStartYearBlur} // Validate on blur
+                          />
+                          <span className="focused-br"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="calci-input__elements range-input-slider">
+                      <div className="slidecontainer">
+                        <input
+                          type="range"
+                          min="2015"
+                          max="2035"
+                          value={startYear}
+                          onChange={handleStartYearSliderChange}
+                          className="input-slider input-amount"
+                          id="nps-invest-slider1"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="slider-flex">
+                      <div>Duration : <span className="bold">15 Years</span></div>
+                      <div>Maturity Period : <span className="bold">21 Years</span></div>
+                    </div>
+                    <div className="note"><span className="bold">Note :</span> Girl's Age must be less then 10 year.</div>
+                  </div>
                 </div>
-                </div>
 
-            
+
                 <div className="width-55">
-                <div className="graph-flex">
-                <div className="amt-with-interest-bg">
-                  <div className="amt-flex">
-                    <div className="fifty">
-                  <div className="amt-interest-heading">Maturity Amount</div>
-                  <div className="amt-heading">₹ {maturityAmount}</div>
-                  </div>
-                  <div>
-                  <div className="amt-interest-heading">Total Amount Deposit</div>
-                  <div className="amt-heading">₹ {totalAmount}</div>
-                  </div>
-                  </div>
-                
-                  <div className="amt-flex">
-                  <div className="fifty">
-                  <div className="amt-interest-heading">Total Interest</div>
-                  <div className="amt-heading">₹ {totalInterest}</div>
-                  </div>
-                  <div className="fifty">
-                  <div className="amt-interest-heading">Maturity Year</div>
-                  <div className="amt-heading">{maturityYear}</div>
-                  </div>
-                  </div>
-                 
-                
-               
-              </div>
+                  <div className="graph-flex">
+                    <div className="amt-with-interest-bg">
+                      <div className="amt-flex">
+                        <div className="fifty">
+                          <div className="amt-interest-heading">Maturity Amount</div>
+                          <div className="amt-heading">₹ {maturityAmount}</div>
+                        </div>
+                        <div>
+                          <div className="amt-interest-heading">Total Amount Deposit</div>
+                          <div className="amt-heading">₹ {totalAmount}</div>
+                        </div>
+                      </div>
 
-              <div className="">
-              <div className="chart-area">
-                      <canvas ref={chartRef} style={{ width: "300px", height: "300px" }} />
+                      <div className="amt-flex">
+                        <div className="fifty">
+                          <div className="amt-interest-heading">Total Interest</div>
+                          <div className="amt-heading">₹ {totalInterest}</div>
+                        </div>
+                        <div className="fifty">
+                          <div className="amt-interest-heading">Maturity Year</div>
+                          <div className="amt-heading">{maturityYear}</div>
+                        </div>
+                      </div>
+
+
+
                     </div>
-              </div>
-               
-                </div>
+
+                    <div className="">
+                      <div className="chart-area">
+                        <canvas ref={chartRef} style={{ width: "300px", height: "300px" }} />
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               </div>
 
-     
+
             </form>
           </div>
         </div>
